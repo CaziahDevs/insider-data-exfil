@@ -1,0 +1,51 @@
+version: '3.8'
+
+networks:
+  corporate-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  file-server:
+    build: ./file-server
+    container_name: file-server
+    networks:
+      corporate-net:
+        ipv4_address: 172.20.0.10
+    ports:
+      - "3306:3306"
+
+  workstation:
+    build: ./workstation
+    container_name: workstation
+    networks:
+      corporate-net:
+        ipv4_address: 172.20.0.20
+    depends_on:
+      - file-server
+
+  exfil-server:
+    build: ./exfil-server
+    container_name: exfil-server
+    networks:
+      corporate-net:
+        ipv4_address: 172.20.0.40
+    volumes:
+      - ./exfil-server/data:/root/stolen-data
+
+  attacker:
+    build: ./attacker
+    container_name: attacker
+    networks:
+      corporate-net:
+        ipv4_address: 172.20.0.30
+    depends_on:
+      - file-server
+      - workstation
+      - exfil-server         
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    privileged: true
