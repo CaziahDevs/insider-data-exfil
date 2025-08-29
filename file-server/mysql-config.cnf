@@ -1,3 +1,8 @@
 [mysqld]
 general_log = 1
 general_log_file = /var/log/mysql/queries.log
+
+# WARNING: Security vulnerability for demonstration purposes only
+# mysql_native_password is deprecated and insecure
+# Production environments should use caching_sha2_password with proper SSL/TLS
+default-authentication-plugin = mysql_native_password
