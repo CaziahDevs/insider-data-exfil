@@ -1,18 +1,18 @@
-FROM alpine:latest
+FROM python:3.12-slim-bookworm
 
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     tcpdump \
-    python3 \
-    py3-pip \
-    bash
+    bash \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir scapy
 
 COPY icmp_receiver.py /root/
-COPY start_listener.sh /root/
 
-RUN chmod +x /root/start_listener.sh
+RUN chmod +x /root/icmp_receiver.py
 
 WORKDIR /root
 
 RUN echo 'export PS1="\[\033[0;33m\]exfilserver@\h:\w\$ \[\033[0m\]"' >> /root/.bashrc
 
-CMD ["/root/start_listener.sh"]
+CMD ["tail", "-f", "/dev/null"]

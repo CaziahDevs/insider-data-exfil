@@ -1,0 +1,12 @@
+Reviewing containers
+Updated exfil-server dockerfile to remove redundant script
+delete exfil.py and send a real packet constructed from spoofed data
+
+docker-compose down && docker-compose build --no-cache && docker-compose up -d
+
+docker exec -it workstation bash
+docker exec -it attacker bash
+docker exec -it exfil-server bash
+docker exec -it file-server bash
+
+“You may see an Ettercap error about IPv6 forwarding. This can be ignored since the lab runs purely over IPv4.”
