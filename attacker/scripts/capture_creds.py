@@ -39,7 +39,6 @@ class MySQLExfiltrator:
         
     #Extract and process mysql tcp packets
     def extract_mysql_data(self, packet):
-        print("[DEBUG] No Raw layer, skipping")
         if not packet.haslayer(Raw):
             print("[DEBUG] No Raw layer, skipping")
             return
